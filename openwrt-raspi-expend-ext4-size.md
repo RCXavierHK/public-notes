@@ -21,14 +21,13 @@ reboot
 ```
 ## Step 4. Apply Resize2fs & Done
 ```bash
-BOOT="$(sed -n -e "/\s\/boot\s.*$/{s//p;q}" /etc/mtab)"
+BOOT="$(sed -n -e "/\s\/boot\s.*$/{s///p;q}" /etc/mtab)"
 DISK="${BOOT%%[0-9]*}"
 PART="$((${BOOT##*[^0-9]}+1))"
 ROOT="${DISK}0p${PART}"
 LOOP="$(losetup -f)"
 losetup ${LOOP} ${ROOT}
-# fsck.ext4 -y ${LOOP}
-e2fsck -y ${LOOP}
+e2fsck -f ${LOOP}
 resize2fs ${LOOP}
 reboot
 ```
